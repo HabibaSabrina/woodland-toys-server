@@ -24,6 +24,11 @@ const client = new MongoClient(uri, {
       await client.connect();
       const toysCollection = client.db("woodlandToy").collection("toys")
 
+      app.get('/toys',async(req,res) =>{
+        const cursor = toysCollection.find();
+        const result = await cursor.toArray();
+        res.send(result)
+      })
       app.post('/toys',async(req,res) =>{
         const toy = req.body;
         const result = await toysCollection.insertOne(toy);
