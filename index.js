@@ -7,7 +7,7 @@ const port = process.env.PORT || 5000;
 
 // middlewire
 app.use(cors())
-app.unsubscribe(express.json())
+app.use(express.json())
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lcauzmf.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -22,6 +22,11 @@ const client = new MongoClient(uri, {
     try {
       // Connect the client to the server	(optional starting in v4.7)
       await client.connect();
+
+      app.post('/toys',async(req,res) =>{
+        const toy = req.body;
+        console.log('new toy',toy)
+      })
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
