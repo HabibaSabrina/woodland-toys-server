@@ -22,10 +22,12 @@ const client = new MongoClient(uri, {
     try {
       // Connect the client to the server	(optional starting in v4.7)
       await client.connect();
+      const toysCollection = client.db("woodlandToy").collection("toys")
 
       app.post('/toys',async(req,res) =>{
         const toy = req.body;
-        console.log('new toy',toy)
+        const result = await toysCollection.insertOne(toy);
+        res.send(result)
       })
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
