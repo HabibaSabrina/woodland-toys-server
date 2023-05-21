@@ -37,7 +37,8 @@ const client = new MongoClient(uri, {
       app.get('/toys/:id', async(req,res)=>{
         const id = req.params.id;
         const query = {_id: new ObjectId(id)}
-        const toy = await toysCollection.findOne(query)
+        const toy = await toysCollection.findOne(query);
+        res.send(toy);
       })
       app.post('/toys',async(req,res) =>{
         const toy = req.body;
@@ -49,6 +50,28 @@ const client = new MongoClient(uri, {
         const query = {_id: new ObjectId(id)}
         const result = await toysCollection.deleteOne(query)
         res.send(result);
+      })
+      app.put('/toys/:id', async(req,res)=>{
+        const id = req.params.id;
+        const toy = req.body;
+        console.log(toy, id)
+        const filter = {_id: new ObjectId(id)};
+        const options = {upsert: true}
+        const updatedToy= {
+          $set:{
+            toyName:toy.toyName,
+            toyPhoto:toy.toyPhoto,
+            sellerName: toy.sellerName,
+            sellerEmail: toy.sellerEmail,
+            subCategory: toy.subCategory,
+            ratings:toy.ratings,
+            price: toy.price,
+            quantity: toy.quantity,
+            description: toy.description
+          }
+        }
+        const result = await toysCollection.updateOne(filter, updatedToy, options)
+        res.send(result)
       })
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
