@@ -30,7 +30,7 @@ const client = new MongoClient(uri, {
         if(req.query?.sellerEmail){
           query = {sellerEmail: req.query.sellerEmail}
         }
-        const cursor = toysCollection.find(query);
+        const cursor = toysCollection.find(query).limit(20);
         const result = await cursor.toArray();
         res.send(result)
       })
